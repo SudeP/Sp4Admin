@@ -1,0 +1,45 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Fatura Tahsilati">
+    <meta name="keyword" content="fatura, tahsilat, online tahsilat,">
+    <meta name="author" content="faturasepeti.net">
+    <link rel="shortcut icon" href="" type="image/png">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" href="~/Content/toastr/toastr.min.css" />
+    <link href="~/Content/assets/css/style.css" rel="stylesheet">
+    <link href="~/Content/assets/css/style-responsive.css" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="container">
+        <form class="form-signin" action="" id="LoginForm">
+            <div class="form-signin-heading text-center">
+                <h1 class="sign-title">Giriş Yap</h1>
+                <img src="~/Content/assets/images/login-logo.png" alt="" />
+            </div>
+            <div class="login-wrap">
+                <input type="text" id="userName" name="userName" placeholder="Kullanıcı Adı" class="form-control" value="" autofocus />
+                <input type="password" id="password" name="password" placeholder="Şifre" class="form-control" value="" />
+                <button class="btn btn-lg btn-login btn-block" id="submit" type="button">
+                    Giriş Yap <i class="fa fa-check"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    @*<script src="~/Content/assets/js/scripts.js"></script>*@
+    <script src="~/Content/toastr/toastr.min.js"></script>
+
+    @{ Html.RenderAction("Main_js", "Home"); }
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+13:00:30
+The value for column 'BankTransDate' in table 'BANKTRANS_TT' is DBNull.
+   konum: sp4net.StrongTypesNS.BANKTRANS_TTRow.get_BankTransDate()
+   konum: SP4ADMIN.Controllers.BankController.List(String SDATE, String EDATE, String BANKTRANS_ID, String STATU) D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Controllers\BankController.cs içinde: satır 108
+

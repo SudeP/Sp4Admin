@@ -1,0 +1,13 @@
+13:33:30
+Kök düzeyindeki veriler geçersiz. Satır 10, konum 1.
+   konum: System.Xml.XmlTextReaderImpl.Throw(Exception e)
+   konum: System.Xml.XmlTextReaderImpl.Throw(String res, String arg)
+   konum: System.Xml.XmlTextReaderImpl.ParseRootLevelWhitespace()
+   konum: System.Xml.XmlTextReaderImpl.ParseDocumentContent()
+   konum: System.Xml.XmlTextReaderImpl.Read()
+   konum: System.Xml.XmlLoader.LoadDocSequence(XmlDocument parentDoc)
+   konum: System.Xml.XmlLoader.Load(XmlDocument doc, XmlReader reader, Boolean preserveWhitespace)
+   konum: System.Xml.XmlDocument.Load(XmlReader reader)
+   konum: System.Xml.XmlDocument.LoadXml(String xml)
+   konum: SP4ADMIN.Controllers.HomeController.Login(String userName, String password) D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Controllers\HomeController.cs içinde: satır 87
+

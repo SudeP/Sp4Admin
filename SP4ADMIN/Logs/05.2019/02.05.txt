@@ -1,0 +1,7 @@
+02:05:25
+Connect Failure: Application Service asbroker1 Unknown at NameServer at Host netwebo.com.tr Port 5162.   (8234) 
+   konum: sp4net.sp4..ctor(Connection connectObj, Boolean useWebConfigFile)
+   konum: sp4net.sp4..ctor(Connection connectObj)
+   konum: SP4ADMIN.Models.DalCustomer.ConnectionOpen() D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\DalCustomer.cs içinde: satır 137
+   konum: SP4ADMIN.Models.DalCustomer.DalList(String apikey, String sdate, String edate, String retailnum, String name, String gsm, String statu) D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\DalCustomer.cs içinde: satır 54
+

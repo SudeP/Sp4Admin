@@ -1,0 +1,65 @@
+﻿<script>
+    setInterval(function () {
+        if ($('#NewOrderCount').val() != null) {
+            GetCounts();
+        }
+    }, 60 * 1000);
+    function GetCounts() {
+        $.ajax({
+            type: 'GET',
+            url: '/Home/GetCounts',
+            dataType: 'json',
+            success: function (response) {
+                if (response.status == '100' || response.status == '900') {
+                    if (response.text != '') {
+                        toastr.warning(response.text);
+                    }
+                    $('#NewOrderCount').text(response.obj.newOrder);
+                    $('#WaitOrderCount').text(response.obj.waitOrder);
+                } else if (response.status == '999') {
+                    window.location.href = response.location;
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+        if ($('#NewOrderCount').val() != null) {
+            GetCounts();
+        }
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/Home/SideBar",
+        //    success: function (response) {
+        //        if (response != "false") {
+        //            $("#AutoMenu").html(response);
+        //        }
+        //        else {
+        //            if (response != "Index" && response != "false") {
+        //                console.log(response);
+        //                window.location.href = '/Home/Index';
+        //            }
+        //        }
+        //    }
+        //});
+        $("#submit").click(function () {
+            if ($('#userName').val() == '' || $('#userName').val() == null ||
+                $('#password').val() == '' || $('#password').val() == null) {
+                toastr.warning('Boş alan bırakmayanız');
+                return false;
+            }
+            $.ajax({
+                type: "GET",
+                url: "/Home/Login?" + $('#LoginForm').serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status == '100') {
+                        window.location.href = response.location;
+                    }
+                    else if (response.status == '900') {
+                        toastr.error(response.text);
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,358 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $('#ListBtn').click(function () {
+            $('#TableBody').html('');
+            $.ajax({
+                type: 'GET',
+                url: '/Customer/List?' + $('#searchOrderForm').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#TableBody').html(response.obj.Table);
+                        SetTableType();
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text, { fadeAway: 50000 });
+                        }
+                    }
+                    else if (response.status == '999') {
+                        window.location.href = response.location;
+                    }
+                }
+            });
+        });
+        $('#NewBtn').click(function () {
+            $('#PopupLoading').attr('style', 'display:block;');
+            $.ajax({
+                type: 'GET',
+                url: '/Customer/New?' + $('#popupForm').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#PopupClose').click();
+                        $('#ListBtn').click();
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        toastr.info(response.text);
+                        window.location.href = response.location;
+                    }
+                }
+            });
+            $('#PopupLoading').attr('style', 'display:none;');
+        });
+        $('#UpdateBtn').click(function () {
+            $('#PopupLoading').attr('style', 'display:block;');
+            $.ajax({
+                type: 'GET',
+                url: '/Customer/Update?' + $('#popupForm').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#PopupClose').click();
+                        $('#ListBtn').click();
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        toastr.info(response.text);
+                        window.location.href = response.location;
+                    }
+                }
+            });
+            $('#PopupLoading').attr('style', 'display:none;');
+        });
+    });
+    function DeActive(corp, cust, retail) {
+        $.ajax({
+            type: 'GET',
+            url: '/Customer/DeActive?corp=' + corp + '&cust=' + cust + '&retail=' + retail,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                if (response.status == '100') {
+                    if (response.text != "") {
+                        toastr.success(response.text);
+                    }
+                    $('#ListBtn').click();
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;
+                }
+            }
+        });
+    }
+    function Active(corp, cust, retail) {
+        $.ajax({
+            type: 'GET',
+            url: '/Customer/Active?corp=' + corp + '&cust=' + cust + '&retail=' + retail,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                if (response.status == '100') {
+                    if (response.text != "") {
+                        toastr.success(response.text);
+                    }
+                    $('#ListBtn').click();
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;
+                }
+            }
+        });
+    }
+    function GetDetail(corp, cust, retail, funcValue) {
+        $.ajax({
+            type: 'GET',
+            url: '/Customer/Get?corp=' + corp + '&cust=' + cust + '&retail=' + retail,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                if (response.status == '100') {
+                    if (response.text != "") {
+                        toastr.success(response.text);
+                    }
+                    if (funcValue == 'update') {
+                        UpdatePopup();
+                    }
+                    else if (funcValue == 'detail') {
+                        DetailPopup();
+                    }
+                    $('#CorpNum', '#popupForm').val(response.obj.CorpNum);
+                    $('#CustNum', '#popupForm').val(response.obj.CustNum);
+                    $('#RetailNum', '#popupForm').val(response.obj.RetailNum);
+                    $('#Name', '#popupForm').val(response.obj.Name);
+                    $('#CustCode', '#popupForm').val(response.obj.CustCode);
+                    $('#BankTransKey', '#popupForm').val(response.obj.BankTransKey);
+                    $('#Contact', '#popupForm').val(response.obj.Contact);
+                    $('#CustType', '#popupForm').select(response.obj.CustType);
+                    $('#Terms', '#popupForm').val(response.obj.Terms);
+                    $('#Address', '#popupForm').val(response.obj.Address);
+                    $('#CityCode', '#popupForm').val(response.obj.CityCode);
+                    $('#CountryCode', '#popupForm').val(response.obj.CountryCode);
+                    $('#City', '#popupForm').val(response.obj.City);
+                    $('#Country', '#popupForm').val(response.obj.Country);
+                    $('#State', '#popupForm').val(response.obj.State);
+                    $('#County', '#popupForm').val(response.obj.CountyName);
+                    $('#Postal', '#popupForm').val(response.obj.PostalCode);
+                    $('#Email', '#popupForm').val(response.obj.Email);
+                    $('#Phone', '#popupForm').val(response.obj.Phone);
+                    $('#Gsm', '#popupForm').val(response.obj.Gsm);
+                    $('#Fax', '#popupForm').val(response.obj.Fax);
+                    $('#BankCode', '#popupForm').val(response.obj.BankCode);
+                    $('#iban', '#popupForm').val(response.obj.iban);
+                    $('#Tax', '#popupForm').val(response.obj.TaxOffice);
+                    $('#TaxNo', '#popupForm').val(response.obj.TaxNo);
+                    $('#Comments', '#popupForm').val(response.obj.Comments);
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;
+                }
+            }
+        });
+    }
+    function NewPopup() {
+        FormReset();
+        $('#popupForm input').attr('readonly', false);
+        $('#CustType', '#popupForm').prop('disabled', false);
+        $('#DetailSide', '#popupForm').attr('style', 'display:none;');
+        $('#UpdateSide', '#popupForm').attr('style', 'display:none;');
+        $('#AddSide', '#popupForm').attr('style', 'display:block;');
+    }
+    function UpdatePopup() {
+        FormReset();
+        $('#popupForm input', '#popupForm').attr('readonly', false);
+        $('#CustType', '#popupForm').prop('disabled', false);
+        $('#DetailSide input', '#popupForm').attr('readonly', true);
+        $('#DetailSide', '#popupForm').attr('style', 'display:block;');
+        $('#UpdateSide', '#popupForm').attr('style', 'display:block;');
+        $('#AddSide', '#popupForm').attr('style', 'display:none;');
+    }
+    function DetailPopup() {
+        FormReset();
+        $('#popupForm input').attr('readonly', true);
+        $('#CustType', '#popupForm').prop('disabled', true);
+        $('#DetailSide', '#popupForm').attr('style', 'display:block;');
+        $('#UpdateSide', '#popupForm').attr('style', 'display:none;');
+        $('#AddSide', '#popupForm').attr('style', 'display:none;');
+    }
+    function FormReset() {
+        $('#popupForm')[0].reset();
+    }
+
+    //Order Side ~>
+
+    $(document).ready(function () {
+        $('#NewBtn', '#popupFormOrder').click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Order/New?' + $('#popupFormOrder').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#popupCloseOrder').click();
+                        $('#' + $('#RetailNum', '#popupFormOrder').val() + ' #new').text(parseInt($('#' + $('#RetailNum', '#popupFormOrder').val() + ' #new').text()) + 1);
+                        bootbox.alert({
+                            message: 'Müşteri Sipariş İd : ' + response.obj.ExtOrdId,
+                            title: 'Bilgi',
+                            size: 'large',
+                        });
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        toastr.info(response.text);
+                        window.location.href = response.location;
+                    }
+                }
+            });
+        });
+        $('#itemCode', '#popupFormOrder').change(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Order/GetItem?' + $('#popupFormOrder').serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    if (response.status == '100') {
+                        $('#Price', '#popupFormOrder').val(response.obj.Price);
+                        $('#TaxRate2', '#popupFormOrder').val(response.obj.TaxRate);
+                        $('#qty', '#popupFormOrder').val(1);
+                        Calculate(1, response.obj.Price, $('#TaxRate2', '#popupFormOrder').val());
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        toastr.info(response.text);
+                        window.location.href = response.location;
+                    }
+                }
+            });
+        });
+        $('#qty', '#popupFormOrder').on('input', function (e) {
+            Calculate($('#qty', '#popupFormOrder').val(), $('#Price', '#popupFormOrder').val(), $('#TaxRate2', '#popupFormOrder').val());
+        });
+        $('#GrandTotal').on('input', function (e) {
+            var GT = parseFloat($('#GrandTotal').val());
+            var TR = parseFloat($('#TaxRate2').val());
+            var PR = parseFloat($('#Price').val());
+            var TT = (GT * 100 / (TR + 100));
+            $('#TotalPrice').val(TT);
+            var TA = (GT - TT).toFixed(2);
+            console.log(GT);
+            console.log(TT);
+            console.log(TA);
+            $('#TaxAmt2').val(TA);
+            var QTY = TT / PR;
+            $('#qty').val(QTY);
+        });
+    });
+    function Calculate(qty, price, tax) {
+        $('#TotalPrice', '#popupFormOrder').val(parseFloat((qty * price)));
+        $('#TaxAmt2', '#popupFormOrder').val(parseFloat(((qty * price) * parseInt(tax)) / 100));
+        $('#GrandTotal', '#popupFormOrder').val(parseFloat(((qty * price) * (parseInt(tax) + 100)) / 100));
+    }
+    function NewPopupOrder(RetailName, RetailNum) {
+        FormResetOrder();
+        $('#RetailNum', '#popupFormOrder').val(RetailNum);
+        $('#RetailName', '#popupFormOrder').val(RetailName);
+        $('#popupFormOrder input', '#popupFormOrder').attr('readonly', false);
+        $('#popupFormOrder input.true').attr('readonly', true);
+        $('#Statu', '#popupFormOrder').prop('disabled', true);
+        $('#Müsteriid', '#popupFormOrder').prop('disabled', false);
+        $('#DetailSide', '#popupFormOrder').attr('style', 'display:none;');
+        $('#UpdateSide', '#popupFormOrder').attr('style', 'display:none;');
+        $('#AddSide', '#popupFormOrder').attr('style', 'display:block;');
+    }
+    function FormResetOrder() {
+        $('#popupFormOrder')[0].reset();
+    }
+    function Conserve(RetailNum) {
+        $.ajax({
+            type: 'GET',
+            url: '/Customer/Conserve?RetailNum=' + RetailNum,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.status == '100') {
+                    console.log('gitmesi lazım');
+                    window.location.href = response.location;
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;
+                }
+            }
+        });
+    }
+</script>

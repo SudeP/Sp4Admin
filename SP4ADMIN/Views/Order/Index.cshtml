@@ -1,0 +1,305 @@
+﻿@using sp4net.StrongTypesNS;
+@using SP4ADMIN.Models;
+@{
+    ViewBag.Title = "Siparişler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    RETAIL_TTDataTable retailTable = ViewBag.Cust;
+    ITEM_TTDataTable itemTable = ViewBag.Item;
+    ITEM_TTRow FirstRow = null;
+    if (itemTable != null)
+    {
+        FirstRow = itemTable.Rows[0] as ITEM_TTRow;
+    }
+    var RetailNum = Veriables.RetailNum;
+    var status = ViewBag.status;
+}
+
+<div class="wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+            <form id="searchOrderForm" autocomplete="off">
+                <div class="form-group col-lg-2">
+                    <label>Başlangış Tarih</label>
+                    <input type="text" class="form-control form_datetime" id="bastar" name="bastar" value="@(RetailNum is null ? DateTime.Now.ToString("yyyy-MM-dd") : "2019-01-01")">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Bitiş Tarih</label>
+                    <input type="text" class="form-control form_datetime" id="bittar" name="bittar" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Sipariş No</label>
+                    <input type="text" class="form-control" id="OrderBCNum" name="OrderBCNum" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Siparis İd</label>
+                    <input type="text" class="form-control" id="Siparisid" name="Siparisid" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Müşteri Adı</label>
+                    <input type="text" class="form-control" id="PRNAME" name="PRNAME" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Müşteri İd</label>
+                    <input type="text" class="form-control" id="Musteriid" name="Musteriid" value="@RetailNum">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Siparis Statu</label>
+                    <input type="text" class="form-control" id="SiparisStatu" name="SiparisStatu" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Statu</label>
+                    <select class="form-control" id="Statu" name="Statu">
+                        <option value="">Hepsi</option>
+                        <option value="01">Bekliyor</option>
+                        <option value="02">Hatalı</option>
+                        <option value="03">Kapandı</option>
+                        <option value="04">Koruma Hesabında</option>
+                        <option value="05">İptal Edildi</option>
+                        <option value="06">Şüpheli</option>
+                        <option value="07">Koruma Hesabında İade</option>
+                        <option value="09">Mutabaka Alındı</option>
+                    </select>
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Durum</label>
+                    <select class="form-control" id="PRDELST" name="PRDELST">
+                        <option value="">Hepsi</option>
+                        <option value="YES">Aktif</option>
+                        <option value="NO">Pasif</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="button" id="ListBtn" class="form-control btn btn-success" value="Sorgula" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="button" id="ListBtnNew" class="form-control btn btn-success" value="Yeni Kayıtları Listele" />
+                        </div>
+                        <div class="col-md-2 col-md-offset-5">
+                            <input type="button" class="form-control btn btn-primary" data-toggle="modal" data-target="#popupArea" onclick="NewPopup();" value="Sipariş Ekle" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Siparişler
+                    <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="table-responsive adv-table">
+                        <table class="display table table-bordered table-striped NotDT" id="TableBody"></table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="1" id="popupArea" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" id="popupClose" class="close" type="button">×</button>
+                <h4 class="modal-title">Sipariş Penceresi</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="popupForm" autocomplete="off">
+                    <input type="hidden" id="OrderBcNum" name="OrderBcNum" />
+                    <div class="row" style="display:none;" id="DetailSide">
+                        <div class="col-md-4">
+                            <select class="form-control" id="Statu" name="Statu">
+                                <option value="01">Yeni Kayıt</option>
+                                <option value="02">Ödeme Bekliyor</option>
+                                <option value="03">Kapandı</option>
+                                <option value="04">Koruma Hesabında</option>
+                                <option value="05">İptal Edildi</option>
+                                <option value="06">Şüpheli</option>
+                                <option value="07">Koruma Hesabında İade</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Müşteri İsmi</label>
+                            <input tpye="text" class="form-control" id="ByRetailName" value="" />
+                        </div>
+                        <div class="col-md-2">
+                            <label>&emsp;</label>
+                            <input type="button" class="btn btn-dark form-control" id="ListRetail" value="Sorgula" />
+                        </div>
+                        <div class="col-md-3">
+                            <label>Müşteri Listesi</label>
+                            <select class="form-control" id="RetailNum" name="RetailNum">
+                                <option value="-1">Seçiniz</option>
+                            </select>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <div class="col-md-3">
+                                <label>Müşteri Filtresi</label>
+                                <input type="text" class="form-control" id="FinderRetail" value="" />
+                            </div>
+                            <div class="col-md-4">
+                                <label>Müşteri</label>
+                                <select class="form-control" id="RetailNum" name="RetailNum">
+                                    @{
+                                        foreach (RETAIL_TTRow row in retailTable.Rows)
+                                        {
+                                            if (row.Statu.ToString().ToLower() == "true")
+                                            {
+                                                <option value="@row.RetailNum">@row.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>*@
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label>Açıklama</label>
+                            <input type="text" class="form-control" id="Description" name="Description" value="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Ürün</label>
+                            <select class="form-control" id="itemCode" name="itemCode">
+                                @{
+                                    if (itemTable != null)
+                                    {
+                                        foreach (ITEM_TTRow row in itemTable.Rows)
+                                        {
+                                            if (row.Statu.ToString().ToLower() == "true")
+                                            {
+                                                <option value="@row.itemCode">@row.ItemName</option>
+                                            }
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Satılacak Adet</label>
+                            <input type="text" class="form-control" id="qty" name="qty" value="1">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label>Birim Fiyatı :</label>
+                            <input type="text" class="form-control true" id="Price" name="Price" value="@(FirstRow is null ? "" : FirstRow.Price.ToString())" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Vergi Oranı %:</label>
+                            <input type="text" class="form-control true" id="TaxRate2" name="TaxRate2" value="@(FirstRow is null ? "" : FirstRow.TaxRate.ToString())" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label>Toplam Tutar :</label>
+                            <input type="text" class="form-control true" id="TotalPrice" name="TotalPrice" value="@(FirstRow is null ? "" : FirstRow.Price.ToString())" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Vergi Tutarı :</label>
+                            <input type="text" class="form-control true" id="TaxAmt2" name="TaxAmt2" value="@(FirstRow is null ? "" : ((FirstRow.Price * (FirstRow.TaxRate)) / 100).ToString())" />
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Genel Toplam :</label>
+                            <input type="text" class="form-control" id="GrandTotal" name="GrandTotal" value="@(FirstRow is null ? "" : ((FirstRow.Price * (FirstRow.TaxRate + 100)) / 100).ToString())" />
+                        </div>
+                    </div>
+                    <div class="mb-3" id="AddSide" style="display:none;">
+                        <br>
+                        <div class="col-md-offset-10">
+                            <input type="button" class="form-control btn-success" id="NewBtn" value="Oluştur">
+                        </div>
+                    </div>
+                    <div class="mb-3" id="UpdateSide" style="display:none;">
+                        <br>
+                        <div class="col-md-offset-10">
+                            <input type="button" class="form-control btn-success" id="UpdateBtn" value="Güncelle">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label>Not*: Ondalıklı sayı için '.' (nokta) kullanınız.</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="1" id="popupFast" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" id="popupClose" class="close" type="button">×</button>
+                <h4 class="modal-title">Sipariş Penceresi</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="popupFormFast" autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Sipariş No</label>
+                            <input type="text" class="form-control" id="OrderBcNum" name="OrderBcNum" value="" readonly />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Eski Statu</label>
+                            <input type="text" class="form-control" id="OldStatu" value="" readonly />
+                        </div>
+                        <div class="col-md-2">
+                            <label>Eski Tutar</label>
+                            <input type="text" class="form-control" id="OldTotal" value="" readonly />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Yeni Statu</label>
+                            <select class="form-control" id="Statu" name="Statu">
+                                <option value="01">Yeni Kayıt</option>
+                                <option value="02">Ödeme Bekliyor</option>
+                                <option value="03">Kapandı</option>
+                                <option value="04">Koruma Hesabında</option>
+                                <option value="05">İptal Edildi</option>
+                                <option value="06">Şüpheli</option>
+                                <option value="07">Koruma Hesabında İade</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Yeni Tutar</label>
+                            <input type="text" class="form-control" id="Total" name="Total" value="" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <br>
+                        <div class="col-md-offset-10">
+                            <input type="button" class="form-control btn-success" id="UpdateBtn" value="Güncelle">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (status != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $('#Statu').val(@status);
+            });
+        </script>
+    }
+}

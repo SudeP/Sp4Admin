@@ -1,0 +1,14 @@
+17:44:45
+Connect Failure: Timeout or Interrupt occurred while attempting to communicate with NameServer. (8231) 
+   konum: sp4net.sp4..ctor(Connection connectObj, Boolean useWebConfigFile)
+   konum: sp4net.sp4..ctor(Connection connectObj)
+   konum: SP4ADMIN.Models.Veriables.ConnectionOpen() D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\Veriables.cs içinde: satır 101
+   konum: SP4ADMIN.Models.Veriables.ListItem(String apikey) D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\Veriables.cs içinde: satır 67
+
+17:44:54
+Connect Failure: Timeout or Interrupt occurred while attempting to communicate with NameServer. (8231) 
+   konum: sp4net.sp4..ctor(Connection connectObj, Boolean useWebConfigFile)
+   konum: sp4net.sp4..ctor(Connection connectObj)
+   konum: SP4ADMIN.Models.Veriables.ConnectionOpen() D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\Veriables.cs içinde: satır 101
+   konum: SP4ADMIN.Models.Veriables.ListItem(String apikey) D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\Veriables.cs içinde: satır 67
+

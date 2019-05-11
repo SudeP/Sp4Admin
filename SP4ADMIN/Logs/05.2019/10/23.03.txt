@@ -1,0 +1,6 @@
+23:03:36
+Uzak sunucuya bağlanılamıyor
+   konum: System.Net.HttpWebRequest.GetResponse()
+   konum: SP4ADMIN.Models.DalItem.GetIp() D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\DalItem.cs içinde: satır 120
+   konum: SP4ADMIN.Models.DalItem.DalList(String apikey, String sdate, String edate, String itemNum, String itemName, String Category1, String Category2, String statu) D:\TFS\SP4ADMIN\SP4ADMIN\SP4ADMIN\Models\DalItem.cs içinde: satır 58
+

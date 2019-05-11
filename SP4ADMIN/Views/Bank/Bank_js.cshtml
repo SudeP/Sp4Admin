@@ -1,0 +1,71 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $('#ListBtn').click(function () {
+            $('#TableBody').html('');
+            $.ajax({
+                type: 'GET',
+                url: '/Bank/List?' + $('#searchOrderForm').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#TableBody').html(response.obj.Table);
+                        SetTableType();
+                    } else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    } else if (response.status == '999') {
+                        window.location.href = response.location;
+                    }
+                }
+            });
+        });
+    });
+    function SetExtOrdId(BankTransID, OldValue) {
+        bootbox.prompt({
+            title: "Yeni Siparis İd : ",
+            backdrop: true,
+            value: OldValue,
+            buttons: {
+                confirm: {
+                    label: 'Güncelle'
+                },
+                cancel: {
+                    label: 'İptal'
+                }
+            },
+            callback: function (result) {
+                if (result == null || result == '') {
+                    toastr.warning('İd boş olamaz');
+                } else {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Bank/SetExtOrdId?BankTransID=' + BankTransID + '&NewId=' + result,
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.status == '100') {
+                                if (response.text != '') {
+                                    toastr.success(response.text);
+                                }
+                                $('#ListBtn').click();
+                            } else if (response.status == '900') {
+                                if (response.text != '') {
+                                    toastr.error(response.text);
+                                }
+                            } else if (response.status == '999') {
+                                Window.location.href = response.location;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+</script>

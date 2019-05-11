@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>SP4 Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Fatura Tahsilati">
+    <meta name="keyword" content="fatura, tahsilat, online tahsilat,">
+    <meta name="author" content="faturasepeti.net">
+    <link rel="shortcut icon" src="" type="image/png">
+
+    @*<link rel="stylesheet" href="~/Content/datetimepicker/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/Content/toastr/toastr.min.css" />
+    @*<link href="~/Content/assets/js/advanced-datatable/css/demo_page.css" rel="stylesheet" />
+        <link href="~/Content/assets/js/advanced-datatable/css/demo_table.css" rel="stylesheet" />
+        <link href="stylesheet" src="~/Content/assets/js/data-tables/DT_bootstrap.css" />*@
+    <link href="~/Content/assets/css/style.css" rel="stylesheet">
+    <link href="~/Content/assets/css/style-responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/datetimepicker/bootstrap-datetimepicker.min.css" media="screen" />
+    <script type="text/javascript" src="~/Content/datetimepicker/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="~/Content/bootstrap.min.css" />*@
+</head>
+<body class="sticky-header">
+    <section>
+        @{
+            if ((Session["api"] != null))
+            {
+                Html.RenderAction("Sidebar", "Home");
+                Html.RenderAction("Header", "Home");
+            }
+        }
+
+        <div class="">
+            @RenderBody()
+        </div>
+
+        @{
+            if ((Session["api"] != null))
+            {
+                Html.RenderAction("Footer", "Home");
+            }
+        }
+    </section>
+    <!-- Placed js at the end of the document so the pages load faster -->
+    <script src="~/Content/assets/js/jquery-1.10.2.min.js"></script>
+    <script src="~/Content/assets/js/jquery-ui-1.9.2.custom.min.js"></script>
+    <script src="~/Content/assets/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Content/assets/js/bootstrap.min.js"></script>
+    <script src="~/Content/assets/js/modernizr.min.js"></script>
+    <script src="~/Content/assets/js/jquery.nicescroll.js"></script>
+    @*<!--dynamic table-->
+        <script type="text/javascript" language="javascript" src="~/Content/assets/js/advanced-datatable/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" src="~/Content/assets/js/data-tables/DT_bootstrap.js"></script>
+        <!--dynamic table initialization -->
+        <script src="~/Content/assets/js/dynamic_table_init.js"></script>
+        <!--common scripts for all pages-->*@
+    <script src="~/Content/assets/js/scripts.js"></script>
+    <script src="~/Content/toastr/toastr.min.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script type="text/javascript" src="~/Content/datetimepicker/bootstrap-datetimepicker.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="~/Content/datetimepicker/bootstrap-datetimepicker.tr.js" charset="utf-8"></script>
+    @*<script type="text/javascript" src="~/Content/Confirmation/bootstrap-confirmation.min.js"></script>*@
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <style>
+    .bootbox {
+        font-weight: bold;
+        color: #000000;
+        font-size: 1.5em;
+    }
+
+  </style>
+    @*<script>
+            $('#BtnOperation').confirmation({
+                title: 'Approve item ?',
+                buttons: [
+                    {
+                        label: 'Approved',
+                        class: 'btn btn-xs btn-success',
+                        callback: function () {
+                            console.log('tiklandi');
+                        }
+                    }
+                ]
+            });
+        </script>*@
+    <script>
+        $(document).ready(function () {
+            $(document).scroll(function () {
+                if ($(document).scrollTop() > 50) {
+                    $('#back-to-top').fadeIn();
+                } else {
+                    $('#back-to-top').fadeOut();
+                }
+                if ($(document).scrollTop() < ((document.body.offsetHeight - window.innerHeight) - 50)) {
+                    $('#back-to-down').fadeIn();
+                } else {
+                    $('#back-to-down').fadeOut();
+                }
+            });
+            $('#back-to-top').click(function () {
+                $('#back-to-top').tooltip('hide');
+                $('body,html').animate({
+                    scrollTop: 0
+                }, 500);
+                return false;
+            });
+            $('#back-to-down').click(function () {
+                $('#back-to-down').tooltip('hide');
+                $('body,html').animate({
+                    scrollTop: $(document).height()
+                }, 500);
+                return false;
+            });
+
+            $('#back-to-top').tooltip('show');
+            $('#back-to-down').tooltip('show');
+
+        });
+    </script>
+    <script>
+        function SetTableType() {
+            if ($('#TableBody') != null && !$('#TableBody').hasClass('NotDT')) {
+                $('#TableBody').DataTable().destroy();
+                $('#TableBody').DataTable({
+                    "pageLength": 10,
+                    "searching": false,
+                    "ordering": false,
+                    "select": true,
+                    "info": true,
+                    "lengthChange": true,
+                    "order": [],
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Turkish.json"
+                    }
+                });
+            }
+        }
+    </script>
+    <script>
+        var Updatelocale = {
+            CONFIRM: 'Güncelle',
+            CANCEL: 'İptal'
+        };
+
+        $(function () {
+            $('.form_datetime').datetimepicker({
+                language: 'tr',
+                format: 'yyyy-mm-dd',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+        });
+        toastr.options.timeOut = 3000;
+    </script>
+    @{
+        if (ViewBag.Controller == "Customer")
+        {
+            Html.RenderAction("Customer_js", "Customer");
+        }
+        else if (ViewBag.Controller == "Item")
+        {
+            Html.RenderAction("Item_js", "Item");
+        }
+        else if (ViewBag.Controller == "Order")
+        {
+            Html.RenderAction("Order_js", "Order");
+        }
+        else if (ViewBag.Controller == "Bank")
+        {
+            Html.RenderAction("Bank_js", "Bank");
+        }
+    }
+    @{ Html.RenderAction("Main_js", "Home"); }
+    <style>
+    .modal-body .form-control {
+        border: 2px solid #000000 !important;
+        font-weight: bold !important;
+        color: #000000 !important;
+    }
+
+    .modal-body label {
+        font-weight: bold !important;
+        color: #000000 !important;
+    }
+
+    .panel .panel-body {
+        overflow: auto;
+    }
+
+    /*.back-to-top {
+                cursor: pointer;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                display: none;
+            }*/
+
+
+  </style>
+</body>
+</html>

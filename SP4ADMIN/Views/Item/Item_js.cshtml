@@ -1,0 +1,233 @@
+﻿
+<script>
+    $(document).ready(function () {
+        $('#ListBtn').click(function () {
+            $('#TableBody').html('');
+            $.ajax({
+                type: 'GET',
+                url: '/Item/List?' + $('#searchOrderForm').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#TableBody').html(response.obj.Table);
+                        SetTableType();
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        toastr.info(response.text);
+                        window.location.href = response.location;;
+                    }
+                }
+            });
+        });
+        $('#NewBtn').click(function () {
+            if ($('#itemCode').val() != '') {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Item/New?' + $('#popupForm').serialize(),
+                    dataType: 'json',
+                    beforeSend: function () {
+                        toastr.info('Lütfen Bekleyiniz.');
+                    },
+                    success: function (response) {
+                        if (response.status == '100') {
+                            if (response.text != "") {
+                                toastr.success(response.text);
+                            }
+                            $('#PopupClose').click();
+                        }
+                        else if (response.status == '900') {
+                            if (response.text != "") {
+                                toastr.error(response.text);
+                            }
+                        }
+                        else if (response.status == '999') {
+                            toastr.info(response.text);
+                            window.location.href = response.location;;
+                        }
+                    }
+                });
+            }
+            else {
+                //bootbox.alert({
+                //    message: 'Ürün kodu boş olamaz',
+                //    size: 'small',
+                //    backdrop: true
+                //}).css({
+                //    'font-weight': 'bold',
+                //    'color': '#000000',
+                //});
+                toastr.warning('Ürün kodu boş olamaz');
+            }
+        });
+        $('#UpdateBtn').click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Item/Update?' + $('#popupForm').serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    toastr.info('Lütfen Bekleyiniz.');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#PopupClose').click();
+                        $('#ListBtn').click();
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        toastr.info(response.text);
+                        window.location.href = response.location;;
+                    }
+                }
+            });
+        });
+    });
+    function DeActive(corp, cust, code) {
+        $.ajax({
+            type: 'GET',
+            url: '/Item/DeActive?corp=' + corp + '&cust=' + cust + '&code=' + code,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                if (response.status == '100') {
+                    if (response.text != "") {
+                        toastr.success(response.text);
+                    }
+                    $('#ListBtn').click();
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;;
+                }
+            }
+        });
+    }
+    function Active(corp, cust, code) {
+        $.ajax({
+            type: 'GET',
+            url: '/Item/Active?corp=' + corp + '&cust=' + cust + '&code=' + code,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                if (response.status == '100') {
+                    if (response.text != "") {
+                        toastr.success(response.text);
+                    }
+                    $('#ListBtn').click();
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;;
+                }
+            }
+        });
+    }
+    function GetDetail(corp, cust, code, funcValue) {
+        $.ajax({
+            type: 'GET',
+            url: '/Item/Get?corp=' + corp + '&cust=' + cust + '&code=' + code,
+            dataType: 'json',
+            beforeSend: function () {
+                toastr.info('Lütfen Bekleyiniz.');
+            },
+            success: function (response) {
+                if (response.status == '100') {
+                    if (response.text != "") {
+                        toastr.success(response.text);
+                    }
+                    if (funcValue == 'update') {
+                        UpdatePopup();
+                    }
+                    else if (funcValue == 'detail') {
+                        DetailPopup();
+                    }
+                    $('#CorpNum', "#popupForm").val(response.obj.CorpNum);
+                    $('#CustNum', "#popupForm").val(response.obj.CustNum);
+                    $('#itemCode', "#popupForm").val(response.obj.itemCode);
+                    $('#itemName', "#popupForm").val(response.obj.ItemName);
+                    $('#Category1', "#popupForm").val(response.obj.Category1);
+                    $('#Category2', "#popupForm").val(response.obj.Category2);
+                    $('#Price', "#popupForm").val(response.obj.Price);
+                    $('#DiscRate', "#popupForm").val(response.obj.DiscRate);
+                    $('#TaxRate', "#popupForm").val(response.obj.TaxRate);
+                    $('#Weight', "#popupForm").val(response.obj.Weight);
+                    $('#Qty', "#popupForm").val(response.obj.qty);
+                    $('#BarCode', "#popupForm").val(response.obj.Barcode);
+                    $('#BuyeritemCode', "#popupForm").val(response.obj.BuyeritemCode);
+                    $('#CargoCampCode', "#popupForm").val(response.obj.CargoCampCode);
+                    $('#itemUrl', "#popupForm").val(response.obj.itemUrl);
+                    $('#Special', "#popupForm").val(response.obj.Special);
+                    $('#itemDesc', "#popupForm").val(response.obj.itemDesc);
+                }
+                else if (response.status == '900') {
+                    if (response.text != "") {
+                        toastr.error(response.text);
+                    }
+                }
+                else if (response.status == '999') {
+                    toastr.info(response.text);
+                    window.location.href = response.location;;
+                }
+            }
+        });
+    }
+    function NewPopup() {
+        FormReset();
+        $('#popupForm input').attr('readonly', false);
+        $('#itemCode').attr('readonly', false);
+        $('#DetailSide').attr('style', 'display:none;');
+        $('#UpdateSide').attr('style', 'display:none;');
+        $('#AddSide').attr('style', 'display:block;');
+    }
+    function UpdatePopup() {
+        FormReset();
+        $('#popupForm input').attr('readonly', false);
+        $('#DetailSide input').attr('readonly', true);
+        $('#itemCode').attr('readonly', true);
+        $('#DetailSide').attr('style', 'display:block;');
+        $('#UpdateSide').attr('style', 'display:block;');
+        $('#AddSide').attr('style', 'display:none;');
+    }
+    function DetailPopup() {
+        FormReset();
+        $('#popupForm input').attr('readonly', true);
+        $('#itemCode').attr('readonly', true);
+        $('#DetailSide').attr('style', 'display:block;');
+        $('#UpdateSide').attr('style', 'display:none;');
+        $('#AddSide').attr('style', 'display:none;');
+    }
+    function FormReset() {
+        $('#popupForm')[0].reset();
+    }
+</script>

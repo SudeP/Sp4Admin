@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "Ürünler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+            <form id="searchOrderForm" autocomplete="off">
+                <div class="form-group col-lg-2">
+                    <label>Başlangış Tarih</label>
+                    <input type="text" class="form-control form_datetime" id="bastar" name="bastar" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Bitiş Tarih</label>
+                    <input type="text" class="form-control form_datetime" id="bittar" name="bittar" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Ürün Adı</label>
+                    <input type="text" class="form-control" id="itemName" name="itemName" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Kategori 1</label>
+                    <input type="text" class="form-control" id="Category1" name="Category1" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Kategori 2</label>
+                    <input type="text" class="form-control" id="Category2" name="Category2" value="">
+                </div>
+                <div class="form-group col-lg-2">
+                    <label>Durum</label>
+                    <select class="form-control" id="Statu" name="Statu">
+                        <option value="ALL">Hepsi</option>
+                        <option value="YES">Aktif</option>
+                        <option value="NO">Pasif</option>
+                    </select>
+                </div>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input type="button" id="ListBtn" class="form-control btn btn-success" value="Sorgula" />
+                        </div>
+                        <div class="col-md-2 col-md-offset-8">
+                            <input type="button" class="form-control btn btn-primary" data-target="#popupArea" data-toggle="modal" onclick="NewPopup();" value="Ürün Ekle" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br>
+        </div>
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Ürünler
+                    <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="display table table-bordered table-striped" id="TableBody"></table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="1" id="popupArea" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" data-dismiss="modal" id="PopupClose" class="close" type="button">×</button>
+                <h4 class="modal-title">Ürün Penceresi</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="popupForm" autocomplete="off">
+                    <div class="row" style="display:block;" id="DetailSide">
+                        <div class="col-md-2 mb-3">
+                            <label>Şirket No</label>
+                            <input type="text" class="form-control" name="CorpNum" id="CorpNum" value="" readonly>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label>Ürün No</label>
+                            <input type="text" class="form-control" name="CustNum" id="CustNum" value="" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Ürün Kodu<label class="text-danger">*</label></label>
+                            <input type="text" style="display:block;" class="form-control" name="itemCode" id="itemCode" value="" required="">
+                        </div>
+                        <div class="col-md-4 ">
+                            <label>Ürün Adı</label>
+                            <input type="text" class="form-control" name="itemName" id="itemName" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 ">
+                            @*<label>Kategori 1</label>*@
+                            <input type="hidden" class="form-control" name="Category1" id="Category1" value="" required="">
+                        </div>
+                        <div class="col-md-4">
+                            @*<label>Kategori 2</label>*@
+                            <input type="hidden" class="form-control" name="Category2" id="Category2" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label>Birim Fiyatı</label>
+                            <input type="text" class="form-control" name="Price" id="Price" value="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Miktar</label>
+                            <input type="text" class="form-control" name="Qty" id="Qty" value="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            <label>Vergi Oranı</label>
+                            <input type="text" class="form-control" name="TaxRate" id="TaxRate" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-2">
+                            <label>@*Ağırlık*@</label>
+                            <input type="hidden" class="form-control" name="Weight" id="Weight" value="" required="">
+                        </div>
+                        <div class="col-md-2">
+                            @*<label>İndirim Oranı</label>*@
+                            <input type="hidden" class="form-control" name="DiscRate" id="DiscRate" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-4">
+                            @*<label>Barkod</label>*@
+                            <input type="hidden" class="form-control" name="BarCode" id="BarCode" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-3">
+                            @*<label>Ted. Stok Kodu</label>*@
+                            <input type="hidden" class="form-control" name="BuyeritemCode" id="BuyeritemCode" value="" required="">
+                        </div>
+                        <div class="col-md-3">
+                            @*<label>Kargo Kamp. Miktarı</label>*@
+                            <input type="hidden" class="form-control" name="CargoCampCode" id="CargoCampCode" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-8 ">
+                            @*<label>Ürün Url</label>*@
+                            <input type="hidden" class="form-control" name="itemUrl" id="itemUrl" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row" style="display:none;">
+                        <div class="col-md-8 ">
+                            @*<label>Özel Açıklama</label>*@
+                            <input type="hidden" class="form-control" name="Special" id="Special" value="" required="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 ">
+                            <label>Not</label>
+                            <input type="text" class="form-control" name="itemDesc" id="itemDesc" value="" required="">
+                        </div>
+                    </div>
+                    <div class="mb-3" id="AddSide" style="display:block;">
+                        <div class="col-md-offset-10">
+                            <input type="button" class="form-control btn-success" id="NewBtn" value="Oluştur" required="">
+                        </div>
+                    </div>
+                    <div class="mb-3" id="UpdateSide" style="display:block;">
+                        <div class="col-md-offset-10">
+                            <input type="button" class="form-control btn-success" id="UpdateBtn" value="Güncelle" required="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
