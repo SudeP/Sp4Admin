@@ -97,13 +97,15 @@ namespace SP4ADMIN.Controllers
                                 {
                                     BANKTRANS_TTRow currentRow = dataTable.Rows[a] as BANKTRANS_TTRow;
                                     Table += "<tr>";
-                                    if (currentRow.Statu.StartsWith("02"))
+                                    if (true/*currentRow.Statu.StartsWith("02")*/)
                                     {
                                         Table += $@"<td><input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} onclick={'"'}SetExtOrdId('{currentRow.BankTransID}','{currentRow.ExtOrderIDupd}');{'"'} value={'"'}Id değiştir{'"'} /></td>";
                                     }
                                     else
                                     {
+#pragma warning disable CS0162 // Unreachable code detected
                                         Table += "<td></td>";
+#pragma warning restore CS0162 // Unreachable code detected
                                     }
                                     Table +=
                                     $@"

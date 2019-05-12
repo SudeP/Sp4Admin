@@ -124,7 +124,7 @@ namespace SP4ADMIN.Controllers
                             {
                                 ORDERBC_TTRow currentRow = dataTable.Rows[a] as ORDERBC_TTRow;
                                 Table += $"<tr class={'"'}gradeX{'"'}><td>";
-                                if (currentRow.Statu.ToString().ToLower().StartsWith("09"))
+                                if (!currentRow.Statu.ToString().ToLower().StartsWith("09"))
                                 {
                                     Table += $@"
                                 <input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupFast{'"'} onclick={'"'}GetDetailFast({currentRow.OrderBcNum});{'"'} value={'"'}Fiyat & Statu{'"'}/>
