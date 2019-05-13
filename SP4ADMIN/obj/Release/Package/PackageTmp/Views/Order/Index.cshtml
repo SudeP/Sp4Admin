@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = "Siparişler";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var status = ViewBag.status is null ? null :  ViewBag.status;
+    ViewBag.status = null;
     RETAIL_TTDataTable retailTable = ViewBag.Cust;
     ITEM_TTDataTable itemTable = ViewBag.Item;
     ITEM_TTRow FirstRow = null;
@@ -11,7 +13,6 @@
         FirstRow = itemTable.Rows[0] as ITEM_TTRow;
     }
     var RetailNum = Veriables.RetailNum;
-    var status = ViewBag.status;
 }
 
 <div class="wrapper">
@@ -57,7 +58,7 @@
                         <option value="05">İptal Edildi</option>
                         <option value="06">Şüpheli</option>
                         <option value="07">Koruma Hesabında İade</option>
-                        <option value="09">Mutabaka Alındı</option>
+                        <option value="09">Mutabakat Alındı</option>
                     </select>
                 </div>
                 <div class="form-group col-lg-2">
@@ -115,13 +116,14 @@
                     <div class="row" style="display:none;" id="DetailSide">
                         <div class="col-md-4">
                             <select class="form-control" id="Statu" name="Statu">
-                                <option value="01">Yeni Kayıt</option>
-                                <option value="02">Ödeme Bekliyor</option>
+                                <option value="01">Bekliyor</option>
+                                <option value="02">Hatalı</option>
                                 <option value="03">Kapandı</option>
                                 <option value="04">Koruma Hesabında</option>
                                 <option value="05">İptal Edildi</option>
                                 <option value="06">Şüpheli</option>
                                 <option value="07">Koruma Hesabında İade</option>
+                                <option value="09">Mutabakat Alındı</option>
                             </select>
                         </div>
                     </div>
@@ -297,9 +299,12 @@
     if (status != null)
     {
         <script>
-            $(document).ready(function () {
-                $('#Statu').val(@status);
-            });
+    $(window).load(function () {
+        if (@status != null) {
+        $('#Statu','#searchOrderForm').val('0' + @Html.Raw(status));
+        $('#ListBtn').click();
+        }
+    });
         </script>
     }
 }

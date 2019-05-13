@@ -161,6 +161,7 @@ namespace SP4ADMIN.Controllers
         }
         public string GetCounts()
         {
+            //System.Threading.Thread.Sleep(20000);
             if (!IsLogin(this, "api"))
             {
                 return Return(StatusType.Logout, UrlLogin);
@@ -186,19 +187,25 @@ namespace SP4ADMIN.Controllers
                     }
                     else
                     {
-                        int newOrder = 0, waitOrder = 0;
+                        int waitOrder = 0,errorOrder = 0,closedOrder = 0, reconciliationOrder = 0;
                         DalOrder.DalDataTable.AsEnumerable().ToList().ForEach(Row =>
                         {
                             ORDERBC_TTRow row = Row as ORDERBC_TTRow;
                             if (row.Statu.StartsWith("01"))
-                                newOrder++;
-                            else if (row.Statu.StartsWith("02"))
                                 waitOrder++;
+                            else if (row.Statu.StartsWith("02"))
+                                errorOrder++;
+                            else if (row.Statu.StartsWith("03"))
+                                closedOrder++;
+                            else if (row.Statu.StartsWith("09"))
+                                reconciliationOrder++;
                         });
                         return Return(StatusType.True, new
                         {
-                            newOrder,
-                            waitOrder
+                            waitOrder,
+                            errorOrder,
+                            closedOrder,
+                            reconciliationOrder
                         }, "Güncellendi");
                     }
                 }

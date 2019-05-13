@@ -1,27 +1,79 @@
 ﻿<script>
+    //
+    //Get Count Code
+    //
+    var asyncBool = false;
+    var asyncFunc = async function () {
+        var dot = '.';
+        var dotCount = 1;
+        asyncinterval = setInterval(function () {
+            if (asyncBool) {
+                clearInterval(asyncinterval);
+            }
+            else if (dotCount == 3) {
+                dotCount = 1;
+                dot = '.';
+            } else {
+                dotCount++;
+                dot += '.';
+            }
+            if (!asyncBool) {
+                $('#WaitOrderCount').text(dot);
+                $('#ErrorOrderCount').text(dot);
+                $('#ClosedOrderCount').text(dot);
+                $('#ReconcilationOrderCount').text(dot);
+            }
+        }, 250);
+    }
+    async function SetZeroAll() {
+        $('#WaitOrderCount').text(0);
+        $('#ErrorOrderCount').text(0);
+        $('#ClosedOrderCount').text(0);
+        $('#ReconcilationOrderCount').text(0);
+    }
+    if ($('#ClosedOrderCount').val() != null) {
+        GetCounts();
+    }
     setInterval(function () {
-        if ($('#NewOrderCount').val() != null) {
+        if ($('#ClosedOrderCount').val() != null) {
             GetCounts();
         }
     }, 60 * 1000);
-    function GetCounts() {
-        $.ajax({
+    async function GetCounts() {
+        var Ajjax = $.ajax({
             type: 'GET',
             url: '/Home/GetCounts',
             dataType: 'json',
+            beforeSend: function () {
+                asyncBool = false;
+                asyncFunc.call();
+            },
             success: function (response) {
+                asyncBool = true;
+                clearInterval(asyncFunc);
                 if (response.status == '100' || response.status == '900') {
-                    if (response.text != '') {
-                        toastr.warning(response.text);
-                    }
-                    $('#NewOrderCount').text(response.obj.newOrder);
-                    $('#WaitOrderCount').text(response.obj.waitOrder);
+                    setTimeout(async function () {
+                        if (response.text != '') {
+                            toastr.info(response.text);
+                        }
+                        SetZeroAll()
+                        $('#WaitOrderCount').text(response.obj.waitOrderrder);
+                        $('#ErrorOrderCount').text(response.obj.errorOrder);
+                        $('#ClosedOrderCount').text(response.obj.closedOrder);
+                        $('#ReconcilationOrderCount').text(response.obj.reconciliationOrder);
+                    }, 350);
                 } else if (response.status == '999') {
                     window.location.href = response.location;
                 }
+            },
+            error: function () {
+                asyncBool = true;
             }
         });
     }
+    //
+    //Get Count Code
+    //
     $(document).ready(function () {
         if ($('#NewOrderCount').val() != null) {
             GetCounts();

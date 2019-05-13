@@ -17,7 +17,7 @@ namespace SP4ADMIN.Controllers
         // GET: Order
         public ActionResult Index(string status)
         {
-            ViewBag.status = status;
+            ViewBag.status = status is null ? null : status.Replace("0","");
             if (!IsLogin(this, "api"))
             {
                 return Redirect(UrlLogin);
@@ -124,7 +124,7 @@ namespace SP4ADMIN.Controllers
                             {
                                 ORDERBC_TTRow currentRow = dataTable.Rows[a] as ORDERBC_TTRow;
                                 Table += $"<tr class={'"'}gradeX{'"'}><td>";
-                                if (!currentRow.Statu.ToString().ToLower().StartsWith("09"))
+                                if (currentRow.Statu.ToString().ToLower().StartsWith("03") == false && currentRow.Statu.ToString().ToLower().StartsWith("09") == false)
                                 {
                                     Table += $@"
                                 <input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupFast{'"'} onclick={'"'}GetDetailFast({currentRow.OrderBcNum});{'"'} value={'"'}Fiyat & Statu{'"'}/>
@@ -141,14 +141,14 @@ namespace SP4ADMIN.Controllers
                                 else
                                 {
                                     Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupArea{'"'} onclick={'"'}GetDetail({currentRow.OrderBcNum},'detail');{'"'} value={'"'}İncele{'"'}/>";
-                                    if (currentRow.delst.ToString().ToLower() == "true")
-                                    {
-                                        Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.OrderBcNum});{'"'} value={'"'}Pasife Çek{'"'}/>";
-                                    }
-                                    else
-                                    {
-                                        Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.OrderBcNum});{'"'} value={'"'}Aktife Çek{'"'}/>";
-                                    }
+                                    //if (currentRow.delst.ToString().ToLower() == "true")
+                                    //{
+                                    //    Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.OrderBcNum});{'"'} value={'"'}Pasife Çek{'"'}/>";
+                                    //}
+                                    //else
+                                    //{
+                                    //    Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.OrderBcNum});{'"'} value={'"'}Aktife Çek{'"'}/>";
+                                    //}
                                 }
                                 Table += $@"</td>
                         <td>{currentRow.ExtOrderID}</td>
