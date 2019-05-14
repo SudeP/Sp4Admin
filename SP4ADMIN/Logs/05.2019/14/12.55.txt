@@ -1,0 +1,5 @@
+12:55:56
+Nesne başvurusu bir nesnenin örneğine ayarlanmadı.
+   konum: SP4ADMIN.Controllers.HomeController.Login(String userName, String password)
+
+

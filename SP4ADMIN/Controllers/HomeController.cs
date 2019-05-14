@@ -79,10 +79,11 @@ namespace SP4ADMIN.Controllers
         }
         public string Login(string userName, string password)
         {
+            string xml = null;
             try
             {
                 HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create($"http://{Ip}/scripts/cgiip.exe/WService=wsbroker1/websrv/GetLogin.r?Uname={userName}&Pwd={password}");
-                string xml = new StreamReader(((HttpWebResponse)webRequest.GetResponse()).GetResponseStream()).ReadToEnd();
+                xml = new StreamReader(((HttpWebResponse)webRequest.GetResponse()).GetResponseStream()).ReadToEnd();
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(xml);
                 if (xmlDocument.GetElementsByTagName("errcode").Count <= 0)
@@ -113,6 +114,8 @@ namespace SP4ADMIN.Controllers
                     + ex.Message
                     + Environment.NewLine
                     + ex.StackTrace
+                    + Environment.NewLine
+                    + xml
                     + Environment.NewLine
                     );
                 return Return(StatusType.False, ex.Message);

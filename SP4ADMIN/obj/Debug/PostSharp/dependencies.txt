@@ -1,0 +1,2 @@
+C:\ProgramData\PostSharp\6.1.19\bin.Release\net471\PostSharp.Compiler.Engine.dll
+D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\PostSharp\postsharp.config

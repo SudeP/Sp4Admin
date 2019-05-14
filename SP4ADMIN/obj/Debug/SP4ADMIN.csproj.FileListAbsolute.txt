@@ -227,3 +227,7 @@ D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\SP4ADMIN.csproj.CoreCompileInputs
 D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\SP4ADMIN.csproj.CopyComplete
 D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\SP4ADMIN.dll
 D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\SP4ADMIN.pdb
+D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\bin\SP4ADMIN.pssym
+D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\PostSharp\touch
+D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\PostSharp\dependencies.txt
+D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\obj\Debug\PostSharp\postsharp.app.config
