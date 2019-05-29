@@ -8,7 +8,6 @@ using static SP4ADMIN.Models.DalOrder;
 using static SP4ADMIN.Models.ReturnJson;
 using static SP4ADMIN.Models.Tools;
 using static SP4ADMIN.Models.Veriables;
-using System.Reflection;
 
 namespace SP4ADMIN.Controllers
 {
@@ -17,7 +16,7 @@ namespace SP4ADMIN.Controllers
         // GET: Order
         public ActionResult Index(string status)
         {
-            ViewBag.status = status is null ? null : status.Replace("0","");
+            ViewBag.status = status?.Replace("0","");
             if (!IsLogin(this, "api"))
             {
                 return Redirect(UrlLogin);
@@ -129,6 +128,7 @@ namespace SP4ADMIN.Controllers
                                     Table += $@"
                                 <input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupFast{'"'} onclick={'"'}GetDetailFast({currentRow.OrderBcNum});{'"'} value={'"'}Fiyat & Statu{'"'}/>
                                 <input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupArea{'"'} onclick={'"'}GetDetail({currentRow.OrderBcNum},'update');{'"'} value={'"'}Düzenle{'"'}/>";
+                                    /*
                                     if (currentRow.delst.ToString().ToLower() == "true")
                                     {
                                         Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.OrderBcNum});{'"'} value={'"'}Pasife Çek{'"'}/>";
@@ -137,18 +137,21 @@ namespace SP4ADMIN.Controllers
                                     {
                                         Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.OrderBcNum});{'"'} value={'"'}Aktife Çek{'"'}/>";
                                     }
+                                    */
                                 }
                                 else
                                 {
                                     Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupArea{'"'} onclick={'"'}GetDetail({currentRow.OrderBcNum},'detail');{'"'} value={'"'}İncele{'"'}/>";
-                                    //if (currentRow.delst.ToString().ToLower() == "true")
-                                    //{
-                                    //    Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.OrderBcNum});{'"'} value={'"'}Pasife Çek{'"'}/>";
-                                    //}
-                                    //else
-                                    //{
-                                    //    Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.OrderBcNum});{'"'} value={'"'}Aktife Çek{'"'}/>";
-                                    //}
+                                    /*
+                                    if (currentRow.delst.ToString().ToLower() == "true")
+                                    {
+                                        Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.OrderBcNum});{'"'} value={'"'}Pasife Çek{'"'}/>";
+                                    }
+                                    else
+                                    {
+                                        Table += $@"<input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.OrderBcNum});{'"'} value={'"'}Aktife Çek{'"'}/>";
+                                    }
+                                    */
                                 }
                                 Table += $@"</td>
                         <td>{currentRow.ExtOrderID}</td>
@@ -194,7 +197,7 @@ namespace SP4ADMIN.Controllers
                                 Toplam_tutar += currentRow.Toplam_tutar;
                             }
                             Table += $@"
-<td>Genel Toplam</td>
+<td>{dataTable.Rows.Count} Adet Toplamı</td>
 <td></td>
 <td></td>
 <td>{GrandTotal}</td>

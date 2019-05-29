@@ -17,6 +17,7 @@ namespace SP4ADMIN.Models
             IPTAL_EDILDI = 05,
             SUPHELI = 06,
             KORUMA_HESABINDAN_IADE = 07,
+            IPTAL_BEKLEMEDE = 08,
             MUTABAKATA_ALINDI = 09
         }
         private static sp4 _sp4;
@@ -210,6 +211,9 @@ namespace SP4ADMIN.Models
                 case "7":
                 case "07":
                     return OrderType.KORUMA_HESABINDAN_IADE.ToString().Replace("_", " ");
+                case "8":
+                case "08":
+                    return OrderType.IPTAL_BEKLEMEDE.ToString().Replace("_", " ");
                 case "9":
                 case "09":
                     return OrderType.MUTABAKATA_ALINDI.ToString().Replace("_", " ");

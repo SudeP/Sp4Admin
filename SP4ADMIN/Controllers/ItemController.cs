@@ -96,15 +96,19 @@ namespace SP4ADMIN.Controllers
                                     Table +=
                                     $@"
                             <input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupArea{'"'} onclick={'"'}GetDetail({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"},'update');{'"'} value={'"'}Düzenle{'"'}/>
-                            <input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"});{'"'} value={'"'}Pasife Çek{'"'}/>
                             </td>";
+                                    /*
+                            <input type={'"'}button{'"'} class={'"'}btn btn-danger{'"'} onclick={'"'}DeActive({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"});{'"'} value={'"'}Pasife Çek{'"'}/>
+                                     */
                                 }
                                 else
                                 {
                                     Table +=
                                     $@"
-                            <input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} data-target={'"'}#popupArea{'"'} data-toggle={'"'}modal{'"'} onclick={'"'}GetDetail({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"},'detail');{'"'} value={'"'}İncele{'"'}/>
-                            <input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"});{'"'} value={'"'}Aktife Çek{'"'}/>";
+                            <input type={'"'}button{'"'} class={'"'}btn btn-primary{'"'} data-target={'"'}#popupArea{'"'} data-toggle={'"'}modal{'"'} onclick={'"'}GetDetail({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"},'detail');{'"'} value={'"'}İncele{'"'}/>";
+                                    /*
+                            <input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} onclick={'"'}Active({currentRow.CorpNum},{currentRow.CustNum},{"'"}{currentRow.itemCode}{"'"});{'"'} value={'"'}Aktife Çek{'"'}/>
+                                 */
                                 }
                                 Table += $@"</td>
                             <td>{currentRow.itemCode}</td>

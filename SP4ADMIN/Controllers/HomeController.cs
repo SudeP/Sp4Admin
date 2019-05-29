@@ -102,7 +102,7 @@ namespace SP4ADMIN.Controllers
                     {
                         Session["api"] = xmlDocument.GetElementsByTagName("errdesc")[0].InnerText.Split('!')[0];
                         SidebarParse();
-                        return Return(StatusType.True, location: "/Home/Main");
+                        return Return(StatusType.True, location: UrlHome);
                     }
                 }
             }

@@ -103,8 +103,11 @@ namespace SP4ADMIN.Controllers
                                          $@"
                                  <input type={'"'}button{'"'} class={'"'}btn btn-success{'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupAreaOrder{'"'} onclick={'"'}NewPopupOrder('{currentRow.Name}','{currentRow.RetailNum}');{'"'} value={'"'}Sip. Ekle{'"'}/>
                                  <input type={'"'}button{'"'} class={'"'}btn btn-primary {'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupArea{'"'} onclick={'"'}GetDetail({currentRow.CorpNum},{currentRow.CustNum},{currentRow.RetailNum},'update');{'"'} value={'"'}Düzenle{'"'}/>
-                                 <input type={'"'}button{'"'} class={'"'}btn btn-danger {'"'} onclick={'"'}DeActive({currentRow.CorpNum},{currentRow.CustNum},{currentRow.RetailNum});{'"'} value={'"'}Pasife Çek{'"'}/>
                                  ";
+
+                                        /*
+                                        <input type={'"'}button{'"'} class={'"'}btn btn-danger {'"'} onclick={'"'}DeActive({currentRow.CorpNum},{currentRow.CustNum},{currentRow.RetailNum});{'"'} value={'"'}Pasife Çek{'"'}/>
+                                     */
                                     }
                                     else
                                     {
@@ -112,8 +115,10 @@ namespace SP4ADMIN.Controllers
                                          $@"
                                  <button type={'"'}button{'"'} class={'"'}btn btn-primary {'"'} data-toggle={'"'}modal{'"'} data-target={'"'}#popupArea{'"'} onclick={'"'}GetDetail({currentRow.CorpNum},{currentRow.CustNum},{currentRow.RetailNum},'detail');{'"'}>
                                  İncele
-                                 </button>
-                                 <input type={'"'}button{'"'} class={'"'}btn btn-success {'"'} onclick={'"'}Active({currentRow.CorpNum},{currentRow.CustNum},{currentRow.RetailNum});{'"'} value={'"'}Aktife Çek{'"'}/>";
+                                 </button>";
+                                        /*
+                                 <input type={'"'}button{'"'} class={'"'}btn btn-success {'"'} onclick={'"'}Active({currentRow.CorpNum},{currentRow.CustNum},{currentRow.RetailNum});{'"'} value={'"'}Aktife Çek{'"'}/>
+                                     */
                                     }
                                     Table += $@"
                                  <input type={'"'}button{'"'} class={'"'}btn btn-info{'"'} onclick={'"'}Conserve({currentRow.RetailNum});{'"'} value={'"'}Tüm Sip.{'"'}/>

@@ -17,6 +17,7 @@ namespace SP4ADMIN.Models
             IPTAL_EDILDI = 05,
             SUPHELI = 06,
             KORUMA_HESABINDAN_IADE = 07,
+            IPTAL_BEKLEMEDE = 08,
             DIGER_BANKA_HRK = 99,
         }
         private static sp4 _sp4;
@@ -143,6 +144,9 @@ namespace SP4ADMIN.Models
                 case "7":
                 case "07":
                     return BankType.KORUMA_HESABINDAN_IADE.ToString().Replace("_", " ");
+                case "8":
+                case "08":
+                    return BankType.IPTAL_BEKLEMEDE.ToString().Replace("_", " ");
                 case "99":
                     return BankType.DIGER_BANKA_HRK.ToString().Replace("_", " ");
                 default:
