@@ -132,10 +132,9 @@ namespace SP4ADMIN.Controllers
         }
         private void SidebarParse()
         {
-            string returned = string.Empty;
             try
             {
-                returned = new StreamReader(((HttpWebResponse)((HttpWebRequest)WebRequest.Create(new Uri($"http://{Ip}/scripts/cgiip.exe/WService=wsbroker1/websrv/GetProgram.r?Apikey=" + Session["api"]))).GetResponse()).GetResponseStream()).ReadToEnd();
+                string returned = new StreamReader(((HttpWebResponse)((HttpWebRequest)WebRequest.Create(new Uri($"http://{Ip}/scripts/cgiip.exe/WService=wsbroker1/websrv/GetProgram.r?Apikey=" + Session["api"]))).GetResponse()).GetResponseStream()).ReadToEnd();
                 if (returned != "")
                 {
                     XmlDocument xmlDocument = new XmlDocument();
@@ -258,21 +257,53 @@ namespace SP4ADMIN.Controllers
                                                select row;
                             var dataTable = responseList.ToList();
                             bool IsNewDate = true;
-                            DateTime lastDate = DateTime.MinValue;
+                            DateTime lastDate = (dataTable[0] as ORDERBC_TTRow).cdate;
                             List<ReportColumn> reportColumns = new List<ReportColumn>();
                             for (int a = 0; a < dataTable.Count; a++)
                             {
                                 ORDERBC_TTRow currentRow = dataTable[a] as ORDERBC_TTRow;
-                                if (lastDate != currentRow.cdate)
+                                ReportColumn currentColumn = new ReportColumn()
                                 {
-                                    IsNewDate = true;
-                                    htmlTable += $@"
+                                    Id = currentRow.Statu.Split(' ')[0],
+                                    Name = currentRow.Statu.Split(' ')[1],
+                                    Amount = currentRow.GrandTotal,
+                                    Piece = 1
+                                };
+                                var oldColumn = reportColumns.FirstOrDefault(row => row.Id == currentColumn.Id) as ReportColumn;
+                                bool hasStatus = oldColumn is null ? false : true;
+                                if (hasStatus)
+                                {
+                                    reportColumns.ForEach((column) =>
+                                    {
+                                        if (column == oldColumn)
+                                        {
+                                            column.Amount += currentColumn.Amount;
+                                            column.Piece += currentColumn.Piece;
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    reportColumns.Add(currentColumn);
+                                }
+                                if (lastDate != currentRow.cdate || (a + 1) == dataTable.Count)
+                                {
+                                    if ((a + 1) != dataTable.Count)
+                                    {
+                                        IsNewDate = true;
+                                    }
+                                    for (int b = 0; b < reportColumns.Count; b++)
+                                    {
+                                        ReportColumn currentReport = reportColumns[b];
+                                        htmlTable += $@"
 <tr>
-<td></td>
-<td></td>
-<td></td>
+<td>{currentReport.Name}</td>
+<td>{currentReport.Piece}</td>
+<td>{currentReport.Amount}</td>
 </tr>
 ";
+                                    }
+                                    reportColumns.Clear();
                                 }
                                 if (IsNewDate)
                                 {
@@ -285,7 +316,7 @@ namespace SP4ADMIN.Controllers
                                     htmlTable += $@"
 <thead>
     <tr>
-        <th colspan={'"'}3{'"'}>{currentRow.cdate.ToShortDateString()} Tarihine ait kayıtlar</th>
+        <th class={'"'}datecolor{'"'} colspan={'"'}3{'"'}>{currentRow.cdate.ToShortDateString()} Tarihine ait kayıtlar</th>
     </tr>
     <tr>
         <th scope={'"'}col{'"'}>Statu</th>
@@ -294,16 +325,6 @@ namespace SP4ADMIN.Controllers
     </tr>
 </thead>
 <tbody>";
-                                }
-                                else
-                                {
-                                    ReportColumn currnetColumn = new ReportColumn() {
-                                        Id = currentRow.Statu.Split(' ')[0],
-                                        Name = currentRow.Statu.Split(' ')[1],
-                                        Amount = currentRow.GrandTotal,
-                                        Piece = 1
-                                    };
-                                   //var hasStatus = reportColumns.Select(row => row.Id == )
                                 }
                             }
                             return Return(StatusType.True, new
