@@ -2,7 +2,7 @@
     //
     //Get Count Code
     //
-    var asyncBool = false;
+    @*var asyncBool = false;
     var asyncFunc = async function () {
         var dot = '.';
         var dotCount = 1;
@@ -70,7 +70,7 @@
                 asyncBool = true;
             }
         });
-    }
+    }*@
     //
     //Get Count Code
     //
@@ -109,6 +109,33 @@
                     }
                     else if (response.status == '900') {
                         toastr.error(response.text);
+                    }
+                }
+            });
+        });
+        $('#ListBtn', '#ReportFilterForm').click(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/Home/GetReport?' + $('#ReportFilterForm').serialize(),
+                dataType: 'json',
+                beforSend: function () {
+                    toastr.info('Lütfen Bekleyiniz');
+                },
+                success: function (response) {
+                    if (response.status == '100') {
+                        if (response.text != "") {
+                            toastr.success(response.text);
+                        }
+                        $('#TableReport').html(response.obj.Table);
+                        SetTableType();
+                    }
+                    else if (response.status == '900') {
+                        if (response.text != "") {
+                            toastr.error(response.text);
+                        }
+                    }
+                    else if (response.status == '999') {
+                        window.location.href = response.location;
                     }
                 }
             });

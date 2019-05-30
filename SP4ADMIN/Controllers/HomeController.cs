@@ -1,16 +1,19 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Xml;
+using System.Net;
+using System.Data;
+using System.Linq;
 using System.Web.Mvc;
+using SP4ADMIN.Models;
+using sp4net.StrongTypesNS;
 using static SP4ADMIN.Models.Tools;
+using static SP4ADMIN.Models.DalOrder;
 using static SP4ADMIN.Models.Veriables;
 using static SP4ADMIN.Models.ReturnJson;
 using static SP4ADMIN.Models.LocalWriter;
-using SP4ADMIN.Models;
-using System.Data;
-using System.Linq;
-using sp4net.StrongTypesNS;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SP4ADMIN.Controllers
 {
@@ -96,7 +99,7 @@ namespace SP4ADMIN.Controllers
                     string Code = xmlDocument.GetElementsByTagName("errcode")[0].InnerText;
                     if (Code != "100")
                     {
-                        return Return(StatusType.False, xmlDocument.GetElementsByTagName("errdesc")[0].InnerText); 
+                        return Return(StatusType.False, xmlDocument.GetElementsByTagName("errdesc")[0].InnerText);
                     }
                     else
                     {
@@ -190,7 +193,7 @@ namespace SP4ADMIN.Controllers
                     }
                     else
                     {
-                        int waitOrder = 0,errorOrder = 0,closedOrder = 0, reconciliationOrder = 0;
+                        int waitOrder = 0, errorOrder = 0, closedOrder = 0, reconciliationOrder = 0;
                         DalOrder.DalDataTable.AsEnumerable().ToList().ForEach(Row =>
                         {
                             ORDERBC_TTRow row = Row as ORDERBC_TTRow;
@@ -226,5 +229,111 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
+        public string GetReport(string startDate, string endDate)
+        {
+            if (!IsLogin(this, "api"))
+            {
+                return Return(StatusType.Logout, "", "/Home/Index");
+            }
+            else
+            {
+                if (startDate is null || endDate is null)
+                {
+                    return Return(StatusType.False, "Hatalı alan");
+                }
+                else
+                {
+                    string htmlTable = string.Empty;
+                    DalList(Session["api"].ToString(), startDate, endDate, "", "", "", "", "", "", "", "");
+                    if (!DalMessage.StartsWith("100"))
+                    {
+                        return Return(StatusType.False, SplitPipe(DalMessage));
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var responseList = from row in DalDataTable.AsEnumerable()
+                                               orderby (row as ORDERBC_TTRow).cdate
+                                               select row;
+                            var dataTable = responseList.ToList();
+                            bool IsNewDate = true;
+                            DateTime lastDate = DateTime.MinValue;
+                            List<ReportColumn> reportColumns = new List<ReportColumn>();
+                            for (int a = 0; a < dataTable.Count; a++)
+                            {
+                                ORDERBC_TTRow currentRow = dataTable[a] as ORDERBC_TTRow;
+                                if (lastDate != currentRow.cdate)
+                                {
+                                    IsNewDate = true;
+                                    htmlTable += $@"
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+";
+                                }
+                                if (IsNewDate)
+                                {
+                                    IsNewDate = false;
+                                    lastDate = currentRow.cdate;
+                                    if (a != 0)
+                                    {
+                                        htmlTable += "</tbody>";
+                                    }
+                                    htmlTable += $@"
+<thead>
+    <tr>
+        <th colspan={'"'}3{'"'}>{currentRow.cdate.ToShortDateString()} Tarihine ait kayıtlar</th>
+    </tr>
+    <tr>
+        <th scope={'"'}col{'"'}>Statu</th>
+        <th scope={'"'}col{'"'}>Adet</th>
+        <th scope={'"'}col{'"'}>Tutar</th>
+    </tr>
+</thead>
+<tbody>";
+                                }
+                                else
+                                {
+                                    ReportColumn currnetColumn = new ReportColumn() {
+                                        Id = currentRow.Statu.Split(' ')[0],
+                                        Name = currentRow.Statu.Split(' ')[1],
+                                        Amount = currentRow.GrandTotal,
+                                        Piece = 1
+                                    };
+                                   //var hasStatus = reportColumns.Select(row => row.Id == )
+                                }
+                            }
+                            return Return(StatusType.True, new
+                            {
+                                Table = htmlTable
+                            }, text: "Listelendi");
+                        }
+                        catch (Exception ex)
+                        {
+                            LocalWriter.L_LocalLog(
+                                DateTime.Now.ToLongTimeString()
+                                + Environment.NewLine
+                                + ex.Message
+                                + Environment.NewLine
+                                + ex.StackTrace
+                                + Environment.NewLine
+                                );
+                            return Return(StatusType.False, ex.Message);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    class ReportColumn
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int Piece { get; set; }
+        public decimal Amount { get; set; }
     }
 }

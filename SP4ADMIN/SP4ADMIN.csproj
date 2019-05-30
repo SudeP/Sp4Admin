@@ -69,7 +69,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\TFS\SP4ADMIN\SP4ADMIN\packages\SP4\Progress.o4glrt.dll</HintPath>
     </Reference>
-    <Reference Include="sp4, Version=2.0.7069.42267, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="sp4, Version=2.0.7070.25760, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\TFS\SP4ADMIN\SP4ADMIN\packages\SP4\sp4.dll</HintPath>
     </Reference>
