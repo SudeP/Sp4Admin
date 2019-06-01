@@ -271,48 +271,9 @@ namespace SP4ADMIN.Controllers
                                 };
                                 var oldColumn = reportColumns.FirstOrDefault(row => row.Id == currentColumn.Id) as ReportColumn;
                                 bool hasStatus = oldColumn is null ? false : true;
-                                if (hasStatus)
+                                if (dataTable.Count == 1)
                                 {
-                                    reportColumns.ForEach((column) =>
-                                    {
-                                        if (column == oldColumn)
-                                        {
-                                            column.Amount += currentColumn.Amount;
-                                            column.Piece += currentColumn.Piece;
-                                        }
-                                    });
-                                }
-                                else
-                                {
-                                    reportColumns.Add(currentColumn);
-                                }
-                                if (lastDate != currentRow.cdate || (a + 1) == dataTable.Count)
-                                {
-                                    if ((a + 1) != dataTable.Count)
-                                    {
-                                        IsNewDate = true;
-                                    }
-                                    for (int b = 0; b < reportColumns.Count; b++)
-                                    {
-                                        ReportColumn currentReport = reportColumns[b];
-                                        htmlTable += $@"
-<tr>
-<td>{currentReport.Name}</td>
-<td>{currentReport.Piece}</td>
-<td>{currentReport.Amount}</td>
-</tr>
-";
-                                    }
-                                    reportColumns.Clear();
-                                }
-                                if (IsNewDate)
-                                {
-                                    IsNewDate = false;
-                                    lastDate = currentRow.cdate;
-                                    if (a != 0)
-                                    {
-                                        htmlTable += "</tbody>";
-                                    }
+                                    ReportColumn currentReport = currentColumn;
                                     htmlTable += $@"
 <thead>
     <tr>
@@ -324,7 +285,71 @@ namespace SP4ADMIN.Controllers
         <th scope={'"'}col{'"'}>Tutar</th>
     </tr>
 </thead>
+<tbody>
+<tr>
+<td>{currentReport.Name}</td>
+<td>{currentReport.Piece}</td>
+<td>{currentReport.Amount}</td>
+</tr>
+</tbody>";
+                                }
+                                else
+                                {
+                                    if (hasStatus)
+                                    {
+                                        reportColumns.ForEach((column) =>
+                                        {
+                                            if (column == oldColumn)
+                                            {
+                                                column.Amount += currentColumn.Amount;
+                                                column.Piece += currentColumn.Piece;
+                                            }
+                                        });
+                                    }
+                                    else
+                                    {
+                                        reportColumns.Add(currentColumn);
+                                    }
+                                    if (lastDate != currentRow.cdate || (a + 1) == dataTable.Count)
+                                    {
+                                        if ((a + 1) != dataTable.Count)
+                                        {
+                                            IsNewDate = true;
+                                        }
+                                        for (int b = 0; b < reportColumns.Count; b++)
+                                        {
+                                            ReportColumn currentReport = reportColumns[b];
+                                            htmlTable += $@"
+<tr>
+<td>{currentReport.Name}</td>
+<td>{currentReport.Piece}</td>
+<td>{currentReport.Amount}</td>
+</tr>
+";
+                                        }
+                                        reportColumns.Clear();
+                                    }
+                                    if (IsNewDate)
+                                    {
+                                        IsNewDate = false;
+                                        lastDate = currentRow.cdate;
+                                        if (a != 0)
+                                        {
+                                            htmlTable += "</tbody>";
+                                        }
+                                        htmlTable += $@"
+<thead>
+    <tr>
+        <th class={'"'}datecolor{'"'} colspan={'"'}3{'"'}>{currentRow.cdate.ToShortDateString()} Tarihine ait kayıtlar</th>
+    </tr>
+    <tr>
+        <th scope={'"'}col{'"'}>Statu</th>
+        <th scope={'"'}col{'"'}>Adet</th>
+        <th scope={'"'}col{'"'}>Tutar</th>
+    </tr>
+</thead>
 <tbody>";
+                                    }
                                 }
                             }
                             return Return(StatusType.True, new

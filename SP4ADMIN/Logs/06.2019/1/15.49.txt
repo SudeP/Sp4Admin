@@ -1,0 +1,7 @@
+15:49:12
+Dizin aralık dışındaydı. Negatif bir değer olmamalı ve koleksiyonun boyutundan daha küçük olmalıdır.
+Parametre adı: index
+   konum: System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   konum: System.Collections.Generic.List`1.get_Item(Int32 index)
+   konum: SP4ADMIN.Controllers.HomeController.GetReport(String startDate, String endDate) D:\GitHub\SP4ADMIN\Sp4Admin\SP4ADMIN\Controllers\HomeController.cs içinde: satır 276
+
