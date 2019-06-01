@@ -197,7 +197,7 @@
             $('#qty').val(QTY);
         });
         $('#ListRetail').click(function () {
-            if ($('#ByRetailName').val() == '' || $('#ByRetailName').val() == null || $('#ByRetailName').val().length < 3) {
+            if ($('#ByRetailName').val() == '' || $('#ByRetailName').val() == null/* || $('#ByRetailName').val().length < 3*/) {
                 toastr.warning('En az 3 karakter yazınız.');
             } else {
                 $('#RetailNum').html('');

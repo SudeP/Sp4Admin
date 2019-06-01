@@ -4,10 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using SP4ADMIN.Models;
-using static SP4ADMIN.Models.DalOrder;
-using static SP4ADMIN.Models.ReturnJson;
 using static SP4ADMIN.Models.Tools;
+using static SP4ADMIN.Models.DalOrder;
 using static SP4ADMIN.Models.Veriables;
+using static SP4ADMIN.Models.ReturnJson;
 
 namespace SP4ADMIN.Controllers
 {
@@ -46,7 +46,6 @@ namespace SP4ADMIN.Controllers
                 return PartialView();
             }
         }
-        [Trace("runtime")]
         public string List(string bastar,
                    string bittar,
                    string OrderBCNum,
@@ -245,7 +244,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string ListNew()
         {
             string Table = string.Empty;
@@ -324,7 +322,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string ListCust(string CustName)
         {
             string Options = $"<option value={'"'}-1{ '"'}>Seçiniz</option>";
@@ -373,7 +370,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string Get(long? OrderBcNum)
         {
             if (!IsLogin(this, "api"))
@@ -436,7 +432,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string Active(long? OrderBcNum)
         {
             if (!IsLogin(this, "api"))
@@ -489,7 +484,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string DeActive(long? OrderBcNum)
         {
             if (!IsLogin(this, "api"))
@@ -542,7 +536,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string New(string RetailNum,
                           string Description,
                           string itemCode,
@@ -658,7 +651,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string Update(long? OrderBcNum,
                              string RetailNum,
                              string Statu,
@@ -760,7 +752,7 @@ namespace SP4ADMIN.Controllers
                                 row.RetailName = oldRow.RetailName;
                                 row.itemCode = oldRow.itemCode;
                                 row.ItemName = oldRow.ItemName;
-                                row.qty = qty == "" ? 0 : decimal.Parse(qty);
+                                row.qty = qty == "" ? 0 : decimal.Parse(qty.Replace(".", ","));
                                 row.Price = Price == "" ? 0 : decimal.Parse(Price.Replace(".", ","));
                                 row.TaxAmt1 = oldRow.TaxAmt1;
                                 row.TaxAmt2 = TaxAmt2 == "" ? 0 : decimal.Parse(TaxAmt2.Replace(".", ","));
@@ -796,7 +788,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string GetItem(string itemCode)
         {
             if (!IsLogin(this, "api"))
@@ -842,7 +833,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string SetStatu(long? OrderBcNum)
         {
             if (!IsLogin(this, "api"))
@@ -888,7 +878,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string GetOrderFast(long? OrderBcNum)
         {
             if (!IsLogin(this, "api"))
@@ -934,7 +923,6 @@ namespace SP4ADMIN.Controllers
                 }
             }
         }
-        [Trace("runtime")]
         public string UpdateFast(long? OrderBcNum, string Statu, decimal? Total)
         {
             if (!IsLogin(this, "api"))
